@@ -1,12 +1,12 @@
-mod problem1;
+pub mod problem1;
 pub mod problem2;
 pub mod problem3;
 pub mod problem4;
-// mod tests_provided;
-pub use crate::problem1::p1;
+mod tests_provided;
 
 #[cfg(test)]
 mod tests {
+    use super::problem1::p1;
     #[test]
     fn it_works() {
         assert_eq!(2 + 2, 4);
