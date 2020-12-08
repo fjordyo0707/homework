@@ -2,7 +2,7 @@
 use crate::problem1::p1::{sum, dedup, filter};
 use crate::problem2::p2::mat_mult;
 use crate::problem3::p3::sieve;
-// use crate::problem4::{hanoi, Peg};
+use crate::problem4::p4::{hanoi, Peg};
 
 //
 // Problem 1
@@ -69,9 +69,9 @@ fn test_sieve_basic() {
 // Problem 4
 //
 
-// #[test]
-// fn test_hanoi_1_disks() {
-    // let result = hanoi(1, Peg::A, Peg::B, Peg::C);
-    // assert_eq!(vec![(Peg::A, Peg::C)], result);
-    // assert_eq!(1, result.len());
-// }
+#[test]
+fn test_hanoi_1_disks() {
+    let result = hanoi(1, Peg::A, Peg::B, Peg::C);
+    assert_eq!(vec![(Peg::A, Peg::C)], result);
+    assert_eq!(1, result.len());
+}
