@@ -1,7 +1,7 @@
 #![cfg(test)]
 use crate::problem1::p1::{sum, dedup, filter};
 use crate::problem2::p2::mat_mult;
-// use crate::problem3::sieve;
+use crate::problem3::p3::sieve;
 // use crate::problem4::{hanoi, Peg};
 
 //
@@ -56,14 +56,14 @@ fn test_mat_mult_identity() {
     }
 }
 
-//
-// Problem 3
-//
 
-// #[test]
-// fn test_sieve_basic() {
-    // assert_eq!(vec![2,3,5,7,11], sieve(12));
-// }
+// Problem 3
+
+
+#[test]
+fn test_sieve_basic() {
+    assert_eq!(vec![2,3,5,7,11], sieve(12));
+}
 
 //
 // Problem 4
