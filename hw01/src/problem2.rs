@@ -4,10 +4,10 @@ pub mod p2 {
 
     /// Computes the product of the inputs `mat1` and `mat2`.
     pub fn mat_mult(mat1: &Matrix, mat2: &Matrix) -> Matrix {
-        assert!(mat1.len() > 0);
-        assert!(mat1[0].len() > 0);
-        assert!(mat2.len() > 0);
-        assert!(mat2[0].len() > 0);
+        assert!(!mat1.is_empty());
+        assert!(!mat1[0].is_empty());
+        assert!(!mat2.is_empty());
+        assert!(!mat2[0].is_empty());
         assert_eq!(mat1[0].len(), mat2.len());
 
         let row_1 = mat1.len();
@@ -21,6 +21,6 @@ pub mod p2 {
                 }
             }
         }
-        return ans;
+        ans
     }
 }

@@ -27,7 +27,7 @@ pub mod p4 {
             ans.append(&mut f_move);
             ans.append(&mut s_move);
             ans.append(&mut t_move);
-            return ans;
+            ans
         }
     }
 }

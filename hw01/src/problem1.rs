@@ -3,9 +3,9 @@ pub mod p1{
     pub fn sum(slice: &[i32]) -> i32 {
         let mut sum_slice = 0;
         for x in slice {
-            sum_slice = sum_slice + x;
+            sum_slice += x;
         }
-        return sum_slice;
+        sum_slice
     }
 
     /// Deduplicates items in the input vector `vs`. Produces a vector containing
@@ -18,7 +18,7 @@ pub mod p1{
                 de_vs.push(*x);
             }
         }
-        return de_vs;
+        de_vs
     }
 
     /// Filters a vector `vs` using a predicate `pred` (a function from `i32` to
@@ -30,7 +30,7 @@ pub mod p1{
                 filter_vs.push(*x);
             }
         }
-        return filter_vs;
+        filter_vs
     }
 }
     

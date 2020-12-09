@@ -17,6 +17,6 @@ pub mod p3 {
             }
         }
 
-        return ans;
+        ans
     }
 }
