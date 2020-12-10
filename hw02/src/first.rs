@@ -79,6 +79,7 @@ mod test {
         assert!(my_bst.insert(2));
         assert!(my_bst.insert(3));
         assert!(my_bst.search(1));
+        assert!(my_bst.insert(0));
         assert_eq!(my_bst.search(4), false);
         assert_eq!(my_bst.insert(1), false);
         println!("{:?}", &my_bst);
