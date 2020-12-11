@@ -5,7 +5,7 @@ pub struct BST<T> {
 
 impl <T : Ord> BST<T> {
     pub fn new() -> Self {
-        BST { root : Link::Empty }
+        BST { root : None }
     }
 
     pub fn insert(&mut self, _val : T) -> bool {
@@ -18,19 +18,21 @@ impl <T : Ord> BST<T> {
 
     
 }
-#[derive(Debug)]
-enum Link<T> {
-    Empty,
-    More(Box<Node<T>>),
+
+type Link<T> = Option<Box<Node<T>>>;
+
+trait InsertSearch<T> {
+    fn insert(&mut self, e: T) -> bool;
+    fn search(&self, e: T) -> bool;
 }
 
-impl<T : Ord> Link<T> {
-    pub fn search(&self, _val : T) -> bool {
+impl<T: Ord> InsertSearch<T> for Link<T> {
+    fn search(&self, _val : T) -> bool {
         match self {
-            Link::Empty => {
+            None => {
                 false
             }
-            Link::More(node) => {
+            Some(node) => {
                 if _val > node.elem {
                     node.right.search(_val)
                 } else if _val < node.elem {
@@ -42,13 +44,13 @@ impl<T : Ord> Link<T> {
         }
     }
 
-    pub fn insert(&mut self, _val : T) -> bool {
+    fn insert(&mut self, _val : T) -> bool {
         match self {
-            Link::Empty => {
-                *self = Link::More(Box::new (Node {elem : _val, left : Link::Empty, right : Link::Empty} ));
+            None => {
+                *self = Some(Box::new (Node {elem : _val, left : None, right : None} ));
                 true
             }
-            Link::More(node) => {
+            Link::Some(node) => {
                 if _val > node.elem {
                     node.right.insert(_val)
                 } else if _val < node.elem {
