@@ -3,11 +3,25 @@ pub struct BST<T> {
     root : Link<T>,
 }
 
-impl <T : Ord> BST<T> {
+pub struct IntoIter<T>(BST<T>);
+
+impl <T> BST<T> {
     pub fn new() -> Self {
         BST { root : None }
     }
+    pub fn into_inter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
 
+    fn pop_to_right(&mut self) -> Option<T> {
+        self.root.take().map(|node| {
+            self.root = node.right;
+            node.elem
+        })
+    }
+}
+
+impl <T: Ord> BST<T> {
     pub fn insert(&mut self, _val : T) -> bool {
         self.root.insert(_val)
     }
@@ -15,8 +29,13 @@ impl <T : Ord> BST<T> {
     pub fn search(&self, _val : T) -> bool {
         self.root.search(_val)
     }
+}
 
-    
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.pop_to_right()
+    }
 }
 
 type Link<T> = Option<Box<Node<T>>>;
@@ -80,10 +99,17 @@ mod test {
         assert!(my_bst.insert(1));
         assert!(my_bst.insert(2));
         assert!(my_bst.insert(3));
-        assert!(my_bst.search(1));
+        assert!(my_bst.insert(4));
         assert!(my_bst.insert(0));
-        assert_eq!(my_bst.search(4), false);
+        assert_eq!(my_bst.search(1), true);
+        assert_eq!(my_bst.search(9), false);
         assert_eq!(my_bst.insert(1), false);
         println!("{:?}", &my_bst);
+        let mut iter = my_bst.into_inter();
+        assert_eq!(iter.next(), Some(1));
+        assert_eq!(iter.next(), Some(2));
+        assert_eq!(iter.next(), Some(3));
+        assert_eq!(iter.next(), Some(4));
+        assert_eq!(iter.next(), None);
     }
 }
