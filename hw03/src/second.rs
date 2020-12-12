@@ -9,15 +9,20 @@ impl <T> BST<T> {
     pub fn new() -> Self {
         BST { root : None }
     }
-    pub fn into_inter(self) -> IntoIter<T> {
-        IntoIter(self)
-    }
 
     fn pop_to_right(&mut self) -> Option<T> {
         self.root.take().map(|node| {
             self.root = node.right;
             node.elem
         })
+    }
+}
+
+impl<T> IntoIterator for BST<T> {
+    type Item = T;
+    type IntoIter = IntoIter<T>;
+    fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
     }
 }
 
@@ -105,11 +110,8 @@ mod test {
         assert_eq!(my_bst.search(9), false);
         assert_eq!(my_bst.insert(1), false);
         println!("{:?}", &my_bst);
-        let mut iter = my_bst.into_inter();
-        assert_eq!(iter.next(), Some(1));
-        assert_eq!(iter.next(), Some(2));
-        assert_eq!(iter.next(), Some(3));
-        assert_eq!(iter.next(), Some(4));
-        assert_eq!(iter.next(), None);
+        for elt in my_bst {
+            println!("{}", elt);
+        }
     }
 }
