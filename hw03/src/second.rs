@@ -5,6 +5,15 @@ pub struct BST<T> {
 
 pub struct IntoIter<T>(BST<T>);
 
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
+}
+
+pub struct IterMut<'a, T> {
+    next: Option<&'a mut Node<T>>,
+}
+
+
 impl <T> BST<T> {
     pub fn new() -> Self {
         BST { root : None }
@@ -26,6 +35,22 @@ impl<T> IntoIterator for BST<T> {
     }
 }
 
+impl<'a, T> IntoIterator for &'a BST<T> {
+    type Item = &'a T;
+    type IntoIter = Iter<'a, T>;
+    fn into_iter(self) -> Iter<'a, T> {
+        Iter{next: self.root.as_ref().map(|node| &**node) }
+    }
+}
+
+impl<'a, T> IntoIterator for &'a mut BST<T> {
+    type Item = &'a mut T;
+    type IntoIter = IterMut<'a, T>;
+    fn into_iter(self) -> IterMut<'a, T> {
+        IterMut{next: self.root.as_mut().map(|node| &mut **node) }
+    }
+}
+
 impl <T: Ord> BST<T> {
     pub fn insert(&mut self, _val : T) -> bool {
         self.root.insert(_val)
@@ -42,6 +67,29 @@ impl<T> Iterator for IntoIter<T> {
         self.0.pop_to_right()
     }
 }
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map(|node| {
+            self.next = node.right.as_ref().map(|node| &**node);
+            &node.elem
+        })
+    }
+}
+
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.take().map(|node| {
+            self.next = node.right.as_mut().map(|node| &mut **node);
+            &mut node.elem
+        })
+    }
+}
+
 
 type Link<T> = Option<Box<Node<T>>>;
 
@@ -110,6 +158,17 @@ mod test {
         assert_eq!(my_bst.search(9), false);
         assert_eq!(my_bst.insert(1), false);
         println!("{:?}", &my_bst);
+        
+        for elt in &my_bst { // calls (&bst).into_iter()
+           println!("{}", elt);
+        }
+
+        let zero = 0;
+        for elt in &mut my_bst { // calls (&mut bst).into_iter()
+            println!("{}", elt);
+            *elt = zero;
+        }
+
         for elt in my_bst {
             println!("{}", elt);
         }
