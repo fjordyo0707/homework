@@ -41,30 +41,66 @@ pub enum Op {
 }
 
 // TODO: Stack.
+pub struct Stack {
+    my_stack: Vec<Elt>
+}
 
 // TODO: Result.
+pub type Result<T> = std::result::Result<T, Error>;
 
 impl Stack {
     /// Creates a new Stack
     pub fn new() -> Stack {
-        unimplemented!()
+        Stack{my_stack: Vec::new()}
     }
 
     /// Pushes a value onto the stack.
     pub fn push(&mut self, val: Elt) -> Result<()> {
-        unimplemented!()
+        self.my_stack.push(val);
+        Ok(())
     }
 
     /// Tries to pop a value off of the stack.
     pub fn pop(&mut self) -> Result<Elt> {
-        unimplemented!()
+        if self.my_stack.is_empty() {
+            Err(Error::Underflow)
+        } else {
+            Ok(self.my_stack.pop().unwrap())
+        }
     }
 
     /// Tries to evaluate an operator using values on the stack.
     pub fn eval(&mut self, op: Op) -> Result<()> {
-        unimplemented!()
+        match op {
+            Op::Add => {
+                let first_i32;
+                let second_i32;
+                let first = self.my_stack.pop().unwrap();
+                let second = self.my_stack.pop().unwrap();
+                if let Elt::Int(value) = first {first_i32 = value} else { return Err(Error::Type) };
+                if let Elt::Int(value) = second {second_i32 = value} else { return Err(Error::Type) };
+                let sum: Elt= Elt::Int(first_i32 + second_i32); 
+                self.my_stack.push(sum);
+                Ok(())
+            }
+            Op::Eq => Ok(()),
+            Op::Neg => Ok(()),
+            Op::Swap => Ok(()),
+            Op::Rand => Ok(()),
+            Op::Quit => Ok(()),
+        }
+    }
+
+    fn is_integer(x: Elt) -> bool {
+        match x {
+            Elt::Int(i) => true,
+            Elt::Bool(b) => false,
+        }
     }
 }
+
+    
+
 
 #[cfg(test)]
 mod tests {
