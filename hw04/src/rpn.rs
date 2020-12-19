@@ -73,13 +73,13 @@ impl Stack {
     pub fn eval(&mut self, op: Op) -> Result<()> {
         match op {
             Op::Add => {
-                let first_i32;
-                let second_i32;
+                let sum: Elt;
                 let first = self.my_stack.pop().unwrap();
                 let second = self.my_stack.pop().unwrap();
-                if let Elt::Int(value) = first {first_i32 = value} else { return Err(Error::Type) };
-                if let Elt::Int(value) = second {second_i32 = value} else { return Err(Error::Type) };
-                let sum: Elt= Elt::Int(first_i32 + second_i32); 
+                if let Elt::Int(value_1) = first { 
+                    if let Elt::Int(value_2) = second { sum = Elt::Int(value_1 + value_2); 
+                    } else { return Err(Error::Type); }
+                } else { return Err(Error::Type); };
                 self.my_stack.push(sum);
                 Ok(())
             }
@@ -88,13 +88,6 @@ impl Stack {
             Op::Swap => Ok(()),
             Op::Rand => Ok(()),
             Op::Quit => Ok(()),
-        }
-    }
-
-    fn is_integer(x: Elt) -> bool {
-        match x {
-            Elt::Int(i) => true,
-            Elt::Bool(b) => false,
         }
     }
 }
