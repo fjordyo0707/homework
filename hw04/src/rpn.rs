@@ -83,11 +83,41 @@ impl Stack {
                 self.my_stack.push(sum);
                 Ok(())
             }
-            Op::Eq => Ok(()),
-            Op::Neg => Ok(()),
+            Op::Eq => {
+                let is_eq: Elt;
+                let first = self.my_stack.pop().unwrap();
+                let second = self.my_stack.pop().unwrap();
+                match first {
+                    Elt::Int(value_1) => {
+                        if let Elt::Int(value_2) = second { is_eq = Elt::Bool(value_1==value_2); 
+                        } else { return Err(Error::Type); }
+                    } 
+                    Elt::Bool(value_1) => { 
+                        if let Elt::Bool(value_2) = second { is_eq = Elt::Bool(value_1==value_2); 
+                        } else { return Err(Error::Type); }
+                    }
+                }
+                self.my_stack.push(is_eq);
+                Ok(())
+            }
+            Op::Neg => {
+                let neg: Elt;
+                let first = self.my_stack.pop().unwrap();
+                match first {
+                    Elt::Int(value_1) => {
+                        neg = Elt::Int(-value_1);
+                    } 
+                    Elt::Bool(value_1) => { 
+                        neg = Elt::Bool(!value_1);
+                    }
+                }
+                self.my_stack.push(neg);
+                Ok(())
+            }
+       
             Op::Swap => Ok(()),
             Op::Rand => Ok(()),
-            Op::Quit => Ok(()),
+            Op::Quit => Err(Error::Quit),
         }
     }
 }
