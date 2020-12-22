@@ -1,5 +1,6 @@
 use std::result;
 use std::io;
+use rand::Rng;
 
 #[derive(Eq, PartialEq, Ord, PartialOrd, Debug)]
 /// An element of the stack. May be either integer or boolean.
@@ -74,19 +75,19 @@ impl Stack {
         match op {
             Op::Add => {
                 let sum: Elt;
-                let first = self.my_stack.pop().unwrap();
-                let second = self.my_stack.pop().unwrap();
+                let first = self.pop()?;
+                let second = self.pop()?;
                 if let Elt::Int(value_1) = first { 
                     if let Elt::Int(value_2) = second { sum = Elt::Int(value_1 + value_2); 
                     } else { return Err(Error::Type); }
                 } else { return Err(Error::Type); };
-                self.my_stack.push(sum);
+                self.push(sum)?;
                 Ok(())
             }
             Op::Eq => {
                 let is_eq: Elt;
-                let first = self.my_stack.pop().unwrap();
-                let second = self.my_stack.pop().unwrap();
+                let first = self.pop()?;
+                let second = self.pop()?;
                 match first {
                     Elt::Int(value_1) => {
                         if let Elt::Int(value_2) = second { is_eq = Elt::Bool(value_1==value_2); 
@@ -97,12 +98,12 @@ impl Stack {
                         } else { return Err(Error::Type); }
                     }
                 }
-                self.my_stack.push(is_eq);
+                self.push(is_eq)?;
                 Ok(())
             }
             Op::Neg => {
                 let neg: Elt;
-                let first = self.my_stack.pop().unwrap();
+                let first = self.pop()?;
                 match first {
                     Elt::Int(value_1) => {
                         neg = Elt::Int(-value_1);
@@ -111,12 +112,35 @@ impl Stack {
                         neg = Elt::Bool(!value_1);
                     }
                 }
-                self.my_stack.push(neg);
+                self.push(neg)?;
                 Ok(())
             }
        
-            Op::Swap => Ok(()),
-            Op::Rand => Ok(()),
+            Op::Swap => {
+                let first = self.pop()?;
+                let second = self.pop()?;
+                self.push(first)?;
+                self.push(second)?;
+                Ok(())
+            }
+            Op::Rand => {
+                let first = self.pop()?;
+                // if let Elt::Int(value) = first {
+                    // let mut rng = rand::thread_rng();
+                    // let rand_num = Elt::Int( rng.gen_range(0..value) );
+                // } else { return Err(Error::Type); }
+                match first {
+                    Elt::Int(value) => {
+                        let mut rng = rand::thread_rng();
+                        let rand_num = Elt::Int( rng.gen_range(0..value) );
+                        self.push(rand_num)?;
+                    }
+                    Elt::Bool(value) => {
+                        return Err(Error::Type);
+                    }
+                }
+                Ok(())
+            }
             Op::Quit => Err(Error::Quit),
         }
     }
