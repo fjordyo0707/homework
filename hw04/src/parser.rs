@@ -10,7 +10,7 @@ pub fn read_eval_print_loop() -> rpn::Result<()> {
     loop {
         // Print a user input prompt.
         print!("> ");
-        try!(io::stdout().flush().map_err(rpn::Error::IO));
+        io::stdout().flush().map_err(rpn::Error::IO)?;
 
         // TODO: Read from stdin into a String, and evaluate_line the result.
         // * An io::Error should be converted into a rpn::Error::IO
@@ -23,7 +23,27 @@ fn evaluate_line(stack: &mut Stack, buf: &String) -> rpn::Result<()> {
     let tokens = buf.trim().split_whitespace();
 
     // TODO: Evaluate all of the tokens on the line.
-    unimplemented!()
+    for token in tokens {
+        if let Ok(token_int) = token.parse::<i32>() {
+            stack.push(rpn::Elt::Int(token_int))?;
+            return Ok(());
+        }
+        if let Ok(token_bool) = token.parse::<bool>() {
+            stack.push(rpn::Elt::Bool(token_bool))?;
+            return Ok(());
+        }
+
+        match token {
+            "+" => { stack.eval(rpn::Op::Add)?; }
+            "~" => { stack.eval(rpn::Op::Neg)?; }
+            "<->" => { stack.eval(rpn::Op::Swap)?; }
+            "=" => { stack.eval(rpn::Op::Eq)?;}
+            "#" => { stack.eval(rpn::Op::Rand)?; }
+            "quit" => { stack.eval(rpn::Op::Quit)?; }
+            _ => { return Err(rpn::Error::Syntax); }
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]

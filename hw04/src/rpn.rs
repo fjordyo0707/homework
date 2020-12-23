@@ -47,7 +47,7 @@ pub struct Stack {
 }
 
 // TODO: Result.
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T> = result::Result<T, Error>;
 
 impl Stack {
     /// Creates a new Stack
@@ -135,7 +135,7 @@ impl Stack {
                         let rand_num = Elt::Int( rng.gen_range(0..value) );
                         self.push(rand_num)?;
                     }
-                    Elt::Bool(value) => {
+                    Elt::Bool(_) => {
                         return Err(Error::Type);
                     }
                 }
