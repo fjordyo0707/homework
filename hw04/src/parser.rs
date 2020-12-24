@@ -14,7 +14,17 @@ pub fn read_eval_print_loop() -> rpn::Result<()> {
 
         // TODO: Read from stdin into a String, and evaluate_line the result.
         // * An io::Error should be converted into a rpn::Error::IO
-        unimplemented!();
+        let mut line = String::new();
+        // if let Err(e) = std::io::stdin().read_line(&mut line) {
+            // return Err(rpn::Error::IO(e));
+        // }
+        match std::io::stdin().read_line(&mut line) {
+            Ok(s) => { 
+                let res =  evaluate_line(&mut stack, &line.to_string());
+                if let Err(e) = res { return Err(e) }
+            }
+            Err(e) => { return Err(rpn::Error::IO(e)) }
+        }
     }
 }
 
