@@ -7,7 +7,7 @@ Self-learning for Rust
 - [x] hw01 - Rust Finger Exercises
 - [X] hw02 - Basic BST
 - [X] hw03 - Generic BST with Iterator
-- [ ] hw04 - RPN Calculator 
+- [X] hw04 - RPN Calculator 
 - [ ] hw05
 - [ ] hw06
 - [ ] hw07
