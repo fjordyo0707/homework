@@ -42,6 +42,7 @@ pub enum Op {
 }
 
 // TODO: Stack.
+#[derive(Debug)]
 pub struct Stack {
     my_stack: Vec<Elt>
 }

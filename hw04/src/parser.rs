@@ -15,13 +15,13 @@ pub fn read_eval_print_loop() -> rpn::Result<()> {
         // TODO: Read from stdin into a String, and evaluate_line the result.
         // * An io::Error should be converted into a rpn::Error::IO
         let mut line = String::new();
-        // if let Err(e) = std::io::stdin().read_line(&mut line) {
-            // return Err(rpn::Error::IO(e));
-        // }
         match std::io::stdin().read_line(&mut line) {
-            Ok(s) => { 
+            Ok(_) => { 
                 let res =  evaluate_line(&mut stack, &line.to_string());
-                if let Err(e) = res { return Err(e) }
+                if let Err(e) = res { return Err(e) 
+                } else {
+                    println!("{:?}", stack);
+                }
             }
             Err(e) => { return Err(rpn::Error::IO(e)) }
         }
@@ -36,11 +36,11 @@ fn evaluate_line(stack: &mut Stack, buf: &String) -> rpn::Result<()> {
     for token in tokens {
         if let Ok(token_int) = token.parse::<i32>() {
             stack.push(rpn::Elt::Int(token_int))?;
-            return Ok(());
+            continue;
         }
         if let Ok(token_bool) = token.parse::<bool>() {
             stack.push(rpn::Elt::Bool(token_bool))?;
-            return Ok(());
+            continue;
         }
 
         match token {
