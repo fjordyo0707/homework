@@ -57,7 +57,12 @@ impl Board {
             };
 
             // Add the new room to self.rooms
-            unimplemented!();
+            self.rooms.push(Rc::new(RefCell::new(Room{  
+                                                        name: name.to_string(), 
+                                                        contents: curios,
+                                                        halls: Vec::new(),
+                                                        wumpus: wumpus 
+                                                     })));
         }
         Ok(())
     }
@@ -72,13 +77,15 @@ impl Board {
         for h in halls {
             let h: &Vec<Json> = try!(h.as_array().ok_or("Unable to parse halls".to_string()));
             if h.len() > 2 { return Err("Invalid number of rooms per hall".to_string()); }
-            let mut hall = Hall::new();
+            let h0 = h[0].as_u64().ok_or("Unable to parse curio".to_string())? as usize;
+            let h1 = h[1].as_u64().ok_or("Unable to parse curio".to_string())? as usize;
 
             // Add room links to halls
-            unimplemented!();
+            let hall= Rc::new(Hall{left: self.rooms[h0].clone(), right: self.rooms[h1].clone()});
 
             // Add hall links to rooms
-            unimplemented!();
+            self.rooms[h0].borrow_mut().halls.push(hall.clone());
+            self.rooms[h1].borrow_mut().halls.push(hall.clone());
         }
         Ok(())
     }
