@@ -22,6 +22,14 @@ impl Eq for Room {}
 
 impl Room {
     // TODO: Implement the necessary methods for Rooms.
+    pub fn new() -> Self {
+        Room {
+            name: "".to_string(),
+            contents: Vec::new(),
+            halls: Vec::new(),
+            wumpus: false,
+        }
+    }
 
     pub fn neighbors_string(&self) -> String {
         // TODO: Implement
