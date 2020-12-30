@@ -25,6 +25,11 @@ impl Room {
 
     pub fn neighbors_string(&self) -> String {
         // TODO: Implement
-        unimplemented!();
+        // This place is referred from 
+        // https://github.com/blogscot/the-darkest-dungeon/blob/master/src/game/room.rs 
+        // need to familiar with the usage!!!
+        self.halls.iter().map(
+            |hall| hall.right.borrow().name.clone()
+        ).collect::<Vec<String>>().join(", ")
     }
 }

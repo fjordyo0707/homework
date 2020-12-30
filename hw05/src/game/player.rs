@@ -69,9 +69,9 @@ impl Player {
     }
 }
 
-/**/impl fmt::Display for Player {
-/**/    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
-/**/        write!(f, "You find yourself in {}.\n\nYou have {} HP and {} gold.",
-/**/               self.location.borrow().name, self.hp, self.gold)
-/**/    }
-/**/}
+impl fmt::Display for Player {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(f, "You find yourself in {}.\n\nYou have {} HP and {} gold.",
+               self.location.borrow().name, self.hp, self.gold)
+    }
+}
