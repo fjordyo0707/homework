@@ -65,7 +65,15 @@ impl Player {
 
     /// Find one of the neighbors of the current room based on its name. Case insensitive.
     fn find_room(&self, room: String) -> Result<Rc<RefCell<Room>>, ()> {
-        unimplemented!()
+        let halls = &self.location.borrow().halls;
+
+        let mut filtered_halls = halls.iter().map(
+            |hall| hall.right.clone()
+        ).filter(
+            |hall_right| hall_right.borrow_mut().name.to_lowercase() == room.to_lowercase()
+        ).collect::<Vec<Rc<RefCell<Room>>>>();
+
+        filtered_halls.pop().ok_or(())
     }
 }
 
