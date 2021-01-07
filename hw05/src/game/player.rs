@@ -5,6 +5,7 @@ use std::cell::RefCell;
 
 use super::curio::Curio;
 use super::room::Room;
+use super::hall::Hall;
 
 const MAX_HP: i32 = 25;
 
@@ -60,7 +61,26 @@ impl Player {
 
     /// Execute the given command on the player and board state.
     pub fn act(&mut self, cmd: Command) -> Result<(), ()> {
-        unimplemented!();
+        match cmd {
+            Command::Go(go_string) => {
+                self.location = self.find_room(go_string)?;
+            }
+            Command::Shoot(shoot_string) => {
+                let shoot_room = self.find_room(shoot_string)?;
+                let is_wumpus = shoot_room.borrow().wumpus;
+                match is_wumpus {
+                    true => {
+                        shoot_room.borrow_mut().wumpus = false;
+                        println!("Ya, you kill the wumpus!");
+                    }
+                    false => {
+                        println!("Ops, you hit nothing.....");
+                    }
+                }
+            }
+        }
+        Ok(())
+        // unimplemented!()
     }
 
     /// Find one of the neighbors of the current room based on its name. Case insensitive.
@@ -69,9 +89,10 @@ impl Player {
 
         let mut filtered_halls = halls.iter().map(
             |hall| hall.right.clone()
-        ).filter(
-            |hall_right| hall_right.borrow_mut().name.to_lowercase() == room.to_lowercase()
-        ).collect::<Vec<Rc<RefCell<Room>>>>();
+        ).filter(|hall_right| {
+            let adj_room_name = &hall_right.borrow().name;
+            adj_room_name.to_lowercase() == room.to_lowercase()
+        }).collect::<Vec<Rc<RefCell<Room>>>>();
 
         filtered_halls.pop().ok_or(())
     }

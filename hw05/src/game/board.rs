@@ -81,11 +81,12 @@ impl Board {
             let h1 = h[1].as_u64().ok_or("Unable to parse curio".to_string())? as usize;
 
             // Add room links to halls
-            let hall= Rc::new(Hall{left: self.rooms[h0].clone(), right: self.rooms[h1].clone()});
+            let forward_hall= Rc::new(Hall{left: self.rooms[h0].clone(), right: self.rooms[h1].clone()});
+            let backward_hall= Rc::new(Hall{left: self.rooms[h1].clone(), right: self.rooms[h0].clone()});
 
             // Add hall links to rooms
-            self.rooms[h0].borrow_mut().halls.push(hall.clone());
-            self.rooms[h1].borrow_mut().halls.push(hall.clone());
+            self.rooms[h0].borrow_mut().halls.push(forward_hall.clone());
+            self.rooms[h1].borrow_mut().halls.push(backward_hall.clone());
         }
         Ok(())
     }
