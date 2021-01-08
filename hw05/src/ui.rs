@@ -11,6 +11,17 @@ enum Error {
 
 pub fn game_loop(mut player: Player) {
     loop {
+        player.room_event();
+        // Print win or lose or anything??
+        if player.is_dead() {
+            println!("No hp, or kill by wumpus");
+            println!("You lose");
+            break
+        } else if player.is_win() {
+            println!("kill by wumpus");
+            println!("You win");
+            break
+        }
         // Print a user input prompt.
         println!("{}\n\nExits are: {}.\n\nWhat wouldst thou deau?",
                  player, player.location.borrow().neighbors_string());

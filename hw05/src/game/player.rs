@@ -5,7 +5,6 @@ use std::cell::RefCell;
 
 use super::curio::Curio;
 use super::room::Room;
-use super::hall::Hall;
 
 const MAX_HP: i32 = 25;
 
@@ -72,6 +71,7 @@ impl Player {
                     true => {
                         shoot_room.borrow_mut().wumpus = false;
                         println!("Ya, you kill the wumpus!");
+                        self.won = true
                     }
                     false => {
                         println!("Ops, you hit nothing.....");
@@ -80,7 +80,40 @@ impl Player {
             }
         }
         Ok(())
-        // unimplemented!()
+    }
+
+    pub fn room_event(&mut self) {
+        // This place is vert stange. But I just finish it.
+        // Let me explain!
+        // First the self.use_curio function will count one for mut ref on self,
+        // so it is not allow to do reference unless you clone a copy of self or 
+        // self.location. However, we really need the ref on self or self.location,
+        // since we want to use borrow on location and get the contents(Vec) as **ref**
+        // (it didn't have copy trait. if we want to borrow to access data, we need 
+        // to get ref). Anyway, we need the ref!
+
+        // As we get the ref on self or self.location. we can simply borrow it and ref
+        // contents. Then, iterate it with using function use_curio. WooYah, finish this part.
+
+        // let room_contents = self.clone().location.borrow().contents;
+        let loc_clone = self.location.clone();
+        let room_contents = &loc_clone.borrow().contents;
+        for one_curio in room_contents {
+            self.use_curio(one_curio.clone());
+        }
+        if loc_clone.borrow().wumpus {
+            println!("Whatever you do, you met wumpus. Just dead :)");
+            self.won = false;
+            self.hp = 0;
+        }
+    }
+
+    pub fn is_dead(&self) -> bool {
+        self.hp <= 0
+    }
+
+    pub fn is_win(&self) -> bool {
+        self.won
     }
 
     /// Find one of the neighbors of the current room based on its name. Case insensitive.

@@ -40,4 +40,8 @@ impl Room {
             |hall| hall.right.borrow().name.clone()
         ).collect::<Vec<String>>().join(", ")
     }
+
+    pub fn clear_content(&mut self) {
+        self.contents.clear();
+    }
 }
