@@ -8,6 +8,6 @@ Self-learning for Rust
 - [X] hw02 - Basic BST
 - [X] hw03 - Generic BST with Iterator
 - [X] hw04 - RPN Calculator 
-- [ ] hw05 - The ~~Fun-Time Reference Sharing~~ _Darkest_ Dungeon
+- [X] hw05 - The ~~Fun-Time Reference Sharing~~ _Darkest_ Dungeon
 - [ ] hw06
 - [ ] hw07
