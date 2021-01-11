@@ -12,6 +12,7 @@ enum Error {
 pub fn game_loop(mut player: Player) {
     loop {
         player.room_event();
+        player.location.borrow_mut().clear_content();
         // Print win or lose or anything??
         if player.is_dead() {
             println!("No hp, or kill by wumpus");
